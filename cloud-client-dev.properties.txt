@@ -1,0 +1,1 @@
+welcome.message=welcome to all learner from dev profile
