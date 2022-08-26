@@ -1,0 +1,85 @@
+
+#database configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user_services
+    username: postgres
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+  sql:
+    init:
+      mode: always
+
+
+
+  #Zipkin and sleuth configuration
+  zipkin:
+    base-url: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: '1.0'
+
+
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+
+#eureka server configuration
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://root:root@localhost:8761/eureka}
+
+
+
+#resilience4j properties
+resilience4j:
+  circuitbreaker:
+    instances:
+      notification:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+
+#actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+#  retry:
+#    instances:
+#      notification:
+#        max-attempts: 3
+#        wait-duration: 5s
+#  timelimiter:
+#    instances:
+#      notification:
+#        timeout-duration: 3s
+
+
+
+#management:
+#  health:
+#    circuitbreakers:
+#      enabled: true
+#  endpoints:
+#    web:
+#      exposure:
+#        include: *
+#  endpoint:
+#    health:
+#      show-details: always
+
